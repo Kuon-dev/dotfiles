@@ -39,17 +39,14 @@ Set-PoshPrompt -Theme  ~/.config/<your file name>.json
 ```
 
 Make sure you put the file in `.config` folder. 
+ 
+If you do not possess the knowledge of exiting on neovim, here are some details.
 
+- `:w` - save, no exit
+- `:e` - reset changes, no exit
+- `:q` - exit (type `:q!` to exit without save
 
-> Note:
-> If you do not possess the knowledge of exiting on neovim, here are some details.
->
-> `:w` - save, no exit
-> `:e` - reset changes, no exit
-> `:q` - exit (type `:q!` to exit without save
-> 
 > Make sure you are in `COMMAND MODE` before typing these commands. If you don't know whether you are in `command mode`, press `<ESC>` key then type the commands
-
 
 Afterwards, run this command to set your powershell script to automatically boot on start.
 
