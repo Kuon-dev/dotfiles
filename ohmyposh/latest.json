@@ -1,0 +1,88 @@
+{
+  "$schema": "https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/schema.json",
+  "blocks": [
+    {
+      "alignment": "left",
+      "segments": [
+        {
+          "background": "#dc6ca4",
+          "foreground": "#ffffff",
+          "leading_diamond": "\ue0b6",
+          "style": "diamond",
+          "template": "{{ .UserName }} ",
+          "type": "session"
+        },
+        {
+          "background": "#34e4ed",
+          "foreground": "#000000",
+          "properties": {
+            "folder_icon": "\uf115",
+            "folder_separator_icon": "\\",
+            "home_icon": "\uf7db",
+            "style": "folder"
+          },
+          "style": "plain",
+          "template": " <#000>\uf07b \uf553</> {{ .Path }} ",
+          "type": "path"
+        },
+        {
+          "background": "#c894e4",
+          "foreground": "#d9d9d9",
+          "powerline_symbol": "\ue0b0",
+          "background_templates": [
+            "{{ if or (.Working.Changed) (.Staging.Changed) }}#ff48ad{{ end }}",
+            "{{ if and (gt .Ahead 0) (gt .Behind 0) }}#ff48ad{{ end }}",
+            "{{ if gt .Ahead 0 }}#B388FF{{ end }}",
+            "{{ if gt .Behind 0 }}#B388FF{{ end }}"
+          ],
+          "properties": {
+            "branch_max_length": 25,
+            "fetch_stash_count": true,
+            "fetch_status": true,
+            "fetch_upstream_icon": true
+          },
+          "style": "plain",
+          "template": " {{ .UpstreamIcon }}{{ .HEAD }}{{ .BranchStatus }}{{ if .Working.Changed }} \uf044 {{ .Working.String }}{{ end }}{{ if and (.Working.Changed) (.Staging.Changed) }} |{{ end }}{{ if .Staging.Changed }} \uf046 {{ .Staging.String }}{{ end }}{{ if gt .StashCount 0 }} \uf692 {{ .StashCount }}{{ end }} ",
+          "type": "git"
+        },
+        {
+          "background": "#ae20e6",
+          "foreground": "#ffffff",
+          "properties": {
+            "always_enabled": true
+          },
+          "style": "plain",
+          "template": " \uf017 {{ .FormattedMs }} ",
+          "type": "executiontime"
+        },
+        {
+          "background": "#53e0c4",
+          "foreground": "#000000",
+          "properties": {
+            "time_format": "15:04 (Mon)"
+          },
+          "style": "diamond",
+          "template": " {{ .CurrentDate | date .Format }} ",
+          "trailing_diamond": "\ue0b0",
+          "type": "time"
+        }
+      ],
+      "type": "prompt"
+    },
+    {
+      "alignment": "left",
+      "newline": true,
+      "segments": [
+        {
+          "foreground": "#CD4277",
+          "style": "plain",
+          "template": " <#45F1C2><b>\u26a1</b></><b>{{ .UserName }}</b> <#26C6DA>\u276f</><#45F1C2>\u276f</>",
+          "type": "text"
+        }
+      ],
+      "type": "prompt"
+    }
+  ],
+  "final_space": true,
+  "version": 2
+}
