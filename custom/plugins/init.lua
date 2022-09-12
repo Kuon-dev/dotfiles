@@ -41,4 +41,10 @@ return {
   ["editorconfig/editorconfig-vim"] = {
     after = "nvim-lspconfig"
  },
+  ["neoclide/coc.nvim"] = {
+    branch = "release",
+    config = function()
+      require "custom.plugins.configs.coc"
+    end,
+  }
 }
