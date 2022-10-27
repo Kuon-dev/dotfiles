@@ -1,7 +1,8 @@
 local M = {}
 
 M.cmp = function()
-  return {
+  local present, cmp = pcall(require, "cmp")
+  local options = {
     formatting = {
       format = function(entry, vim_item)
         if entry.source.name == 'cmp_tabnine' and entry.completion_item.data ~= nil then
@@ -23,16 +24,22 @@ M.cmp = function()
       { name = "path" },
     },
   }
+  cmp.setup(options)
+  -- return options
 end
 
 M.tabnine = function()
-  return {
+
+  local present, tabnine = pcall(require, "cmp_tabnine.config")
+  local config = {
     max_lines = 1000,
     max_num_results = 5,
     sort = true,
     run_on_every_keystroke = true,
     show_prediction_strength = false
   }
+  tabnine.setup(config)
+  -- return config 
 end
 
 return M

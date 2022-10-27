@@ -3,8 +3,9 @@ local M = {
 
   new_hlgroups = {
     -- Neorg
-
-    NeorgCodeBlock = { bg = "darkerblack" },
+    NeorgCodeBlock = { 
+      bg = "darkerblack" 
+    },
 
     NeorgMarkUpBold = {
       fg = "red",
@@ -21,7 +22,12 @@ local M = {
     AlphaHeader = {
       fg = "blue",
     },
+    DiffAdd = {
+      bg = "white",
+      fg = "green",
+    }
   },
-}
 
+
+}
 return M

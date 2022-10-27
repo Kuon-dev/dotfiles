@@ -1,10 +1,19 @@
 local pluginConfs = require "custom.plugins.configs.tabnine"
 
 return {
+  ["hrsh7th/nvim-cmp"] = {
+    config = function()
+      require "plugins.configs.cmp"
+      require "custom.plugins.configs.tabnine".cmp()
+    end,
+  },
   ["tzachar/cmp-tabnine"] = {
-     after = "nvim-cmp",
-     run = "powershell ./install.ps1",
-     config = pluginConfs.tabnine
+    after = "nvim-cmp",
+    run = "powershell ./install.ps1",
+    requires = 'hrsh7th/nvim-cmp',
+    config = function()
+      require "custom.plugins.configs.tabnine".tabnine()
+    end
   },
   ["neovim/nvim-lspconfig"] = {
     config = function()
@@ -22,7 +31,7 @@ return {
     ft = { "html", "javascriptreact", "vue" },
     after = "nvim-treesitter",
     config = function()
-      require "custom.plugins.configs.autotag"
+      require "custom.plugins.configs.override".autotag()
     end,
   },
   ["windwp/nvim-autopairs"] = {
@@ -43,25 +52,57 @@ return {
   },
   ["neoclide/coc.nvim"] = {
     branch = "release",
-    config = function()
-      require "custom.plugins.configs.coc"
-    end,
+--    config = function()
+--      require "custom.plugins.configs.coc"
+--    end,
   },
   ["nvim-telescope/telescope.nvim"] = {
     config = function()
       require "plugins.configs.telescope"
-      require "custom.plugins.configs.telescope"
+      require "custom.plugins.configs.override".telescope()
     end,
   },
   ["NvChad/ui"] = {
     override_options = {
       statusline = {
-        separator_style = "round",
-        overriden_modules = function()
-          return require "custom.statusline"
-        end,
+        separator_style = "arrow",
+--        overriden_modules = function()
+--          return require "custom.statusline"
+--        end,
       },
     },
   },
-  ["mfussenegger/nvim-jdtls"] = { opt = true },
+  ["mfussenegger/nvim-jdtls"] = { 
+    opt = true 
+  },
+  ["akinsho/git-conflict.nvim"] = {
+    tag = "*",
+    config = function()
+      require "custom.plugins.configs.conflict"
+    end
+  },
+  ["lewis6991/gitsigns.nvim"] = {
+    config = function()
+      -- require("plugins.configs.others").gitsigns()
+      require "custom.plugins.configs.gitsigns"
+    end
+  },
+  ["nvim-treesitter/nvim-treesitter"] = {
+    config = function()
+      require "plugins.configs.treesitter"
+      require "custom.plugins.configs.override".treesitter()
+    end
+  },
+  ["kyazdani42/nvim-tree.lua"] = {
+    config = function()
+      require "plugins.configs.nvimtree"
+      require "custom.plugins.configs.override".nvimtree()
+    end
+  },
+  ["lukas-reineke/indent-blankline.nvim"] = {
+    config = function()
+      require "plugins.configs.others".blankline()
+      require "custom.plugins.configs.override".blankline()
+    end
+  },
 }
