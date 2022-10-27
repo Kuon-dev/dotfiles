@@ -6,5 +6,3 @@ Quick file rundown
 - [OhMyPosh](https://ohmyposh.dev) (terminal prompt)
 - [Starship](https://starship.rs) (terminal prompt)
 - Others (junk file, includes vscode theme)
-
-If you have no idea what to do with these files, please read the documentation down below.
