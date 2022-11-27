@@ -41,7 +41,8 @@ M.treesitter = function()
       "lua",
       "vue",
       "tsx",
-      "ruby"
+      "ruby",
+      "php",
     },
     autotag = {
       enable = true,
