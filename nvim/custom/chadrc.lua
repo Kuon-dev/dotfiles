@@ -13,7 +13,7 @@ M.plugins = require "custom.plugins"
 
 M.ui = {
   transparency = true,
-  theme = "ayu-dark",
+  theme = "chadracula",
   theme_toggle = { "ayu-dark", "chadracula" },
   hl_add = require("custom.highlights").new_hlgroups,
   hl_override = require("custom.highlights").overriden_hlgroups,
