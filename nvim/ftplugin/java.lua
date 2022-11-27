@@ -5,7 +5,7 @@ end
 
 local jdtls = require "jdtls"
 local project_name = vim.fn.fnamemodify(vim.fn.getcwd(), ":p:h:t")
-local workspace_dir = "C:/Users/User/AppData/Local/cache/jdtls-workspace" .. project_name
+local workspace_dir = "./" .. project_name
 local extendedClientCapabilities = jdtls.extendedClientCapabilities
 extendedClientCapabilities.resolveAdditionalTextEditsSupport = true
 local config = {
@@ -34,7 +34,8 @@ local config = {
     "-configuration",
     "C:/Users/User/AppData/Local/nvim-data/mason/packages/jdtls/config_win",
 
-    "-data", vim.fn.expand('C:Users/User/AppData/Local/cache/jdtls-workspace') .. project_name,
+    -- "-data", vim.fn.expand('./JavaLSPMetaData') .. project_name,
+    "-data", vim.fn.expand('./LSP'),
   },
 
   -- This is the default if not provided, you can remove it. Or adjust as needed.
