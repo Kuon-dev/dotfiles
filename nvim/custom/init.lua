@@ -15,6 +15,8 @@ local options = {
 
   foldcolumn = '0',
   foldenable = true,
+
+  shiftwidth = 2,
 }
 
 

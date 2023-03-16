@@ -21,12 +21,6 @@ return {
       require "custom.plugins.lspconfig"
     end,
   },
-  ["glepnir/lspsaga.nvim"] = {
-    branch = "main",
-    config = function()
-      require "custom.plugins.configs.lspsaga"
-    end,
-  },
   ["windwp/nvim-ts-autotag"] = {
     ft = { "html", "javascriptreact", "vue" },
     after = "nvim-treesitter",
@@ -49,12 +43,6 @@ return {
   },
   ["editorconfig/editorconfig-vim"] = {
     after = "nvim-lspconfig"
-  },
-  ["neoclide/coc.nvim"] = {
-    branch = "release",
---    config = function()
---      require "custom.plugins.configs.coc"
---    end,
   },
   ["nvim-telescope/telescope.nvim"] = {
     config = function()
@@ -110,5 +98,12 @@ return {
     config = function()
       require "custom.plugins.configs.ufo"
     end
-  }
+  },
+  ["L3MON4D3/LuaSnip"] = {
+    wants = "friendly-snippets",
+    after = "nvim-cmp",
+    config = function()
+      require "custom.plugins.configs.luasnip"
+    end
+  },
 }

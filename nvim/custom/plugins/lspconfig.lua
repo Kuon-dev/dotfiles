@@ -12,6 +12,7 @@ local servers = {
   "eslint",
   "solargraph",
   "r_language_server",
+  "intelephense",
 }
 
 for _, lsp in ipairs(servers) do

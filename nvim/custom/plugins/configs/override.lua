@@ -34,6 +34,7 @@ M.treesitter = function()
       "html",
       "css",
       "javascript",
+      "typescript",
       "json",
       "toml",
       "markdown",
