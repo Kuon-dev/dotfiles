@@ -15,6 +15,14 @@ local servers = {
   "intelephense",
 }
 
+local navbuddy = "nvim-navbuddy"
+
+lspconfig.clangd.setup {
+    on_attach = function(client, bufnr)
+        navbuddy.attach(client, bufnr)
+    end
+}
+
 for _, lsp in ipairs(servers) do
   lspconfig[lsp].setup {
     on_attach = on_attach,

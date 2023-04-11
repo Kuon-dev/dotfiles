@@ -106,4 +106,19 @@ return {
       require "custom.plugins.configs.luasnip"
     end
   },
+  ["SmiteshP/nvim-navic"] = {
+
+  },
+  ["SmiteshP/nvim-navbuddy"] = {
+    requires = {
+        "neovim/nvim-lspconfig",
+        "SmiteshP/nvim-navic",
+        "MunifTanjim/nui.nvim",
+        "numToStr/Comment.nvim",        -- Optional
+        "nvim-telescope/telescope.nvim" -- Optional
+    },
+    config = function()
+      require "custom.plugins.configs.navbuddy"
+    end
+  },
 }

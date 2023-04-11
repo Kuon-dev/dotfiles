@@ -44,6 +44,7 @@ M.treesitter = function()
       "tsx",
       "ruby",
       "php",
+      "cpp",
     },
     autotag = {
       enable = true,

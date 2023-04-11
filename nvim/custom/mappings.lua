@@ -29,6 +29,13 @@ M.nvimtree = {
     ["<C-e>"] = { "<cmd> NvimTreeFocus <CR>", "focus nvimtree" },
     ["<Leader>p"] = { "<cmd> NvimTreeFindFile <CR>", "toggle nvimtree" },
 
+
+    [";p"] = {
+      function()
+        require("nvim-navbuddy").open()
+      end, 
+      "toggle NavBuddy",
+    },
   },
 }
 

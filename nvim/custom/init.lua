@@ -17,6 +17,7 @@ local options = {
   foldenable = true,
 
   shiftwidth = 2,
+  autoread = true,
 }
 
 
