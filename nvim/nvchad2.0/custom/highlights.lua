@@ -23,7 +23,6 @@ local M = {
       fg = "blue",
     },
     DiffAdd = {
-      bg = "black",
       fg = "green",
     }
   },

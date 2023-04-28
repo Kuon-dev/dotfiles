@@ -1,9 +1,7 @@
 local pluginConfs = require "custom.configs.tabnine"
 
 return {
-  {
-    "NvChad/base46",
-  },
+  --[[
   {
     "catppuccin/nvim",
     lazy = false,
@@ -15,6 +13,15 @@ return {
       vim.cmd.colorscheme "catppuccin"
     end
   },
+]]--
+  {
+    "NvChad/ui",
+    lazy = false,
+    branch = "v2.0",
+    require("base46").load_all_highlights();
+    require("nvim-treesitter").highlight;
+  },
+
   {
     "hrsh7th/nvim-cmp",
     dependencies = {
@@ -101,8 +108,8 @@ return {
       require "custom.configs.gitsigns"
     end
   },
-  ["nvim-treesitter/nvim-treesitter"] = {
-    lazy = false,
+  {
+    "nvim-treesitter/nvim-treesitter",
     config = function()
       require "plugins.configs.treesitter"
       require "custom.configs.override".treesitter()

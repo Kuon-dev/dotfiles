@@ -8,7 +8,7 @@ M.plugins = "custom.plugins"
 M.ui = {
   transparency = true,
   theme = "Ayu_dark",
-  theme_toggle = { "Ayu_dark", "Nightowl" },
+  theme_toggle = { "Ayu_dark", "Ayu_dark" },
   statusline = {
     theme = "default",
 

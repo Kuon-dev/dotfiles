@@ -25,9 +25,13 @@ M.autotag = function()
 end
 
 M.treesitter = function()
-
   local present, treesitter = pcall(require, "nvim-treesitter.configs")
+
   local options = {
+    highlight = {
+      enable = true,
+      use_languagetree = true,
+    },
     ensure_installed = {
       "vim",
       "java",
