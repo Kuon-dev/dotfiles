@@ -15,28 +15,18 @@ return {
   },
 ]]--
   {
-    "NvChad/ui",
-    lazy = false,
-    branch = "v2.0",
-    require("base46").load_all_highlights();
-    require("nvim-treesitter").highlight;
-  },
-
-  {
     "hrsh7th/nvim-cmp",
     dependencies = {
       "tzachar/cmp-tabnine"
     },
     config = function()
-      require "plugins.configs.cmp"
       require "custom.configs.tabnine".cmp()
     end,
   },
   {
     "tzachar/cmp-tabnine",
-    after = "nvim-cmp",
-    run = "powershell ./install.ps1",
-    requires = 'hrsh7th/nvim-cmp',
+    build = "powershell ./install.ps1",
+    dependencies = 'hrsh7th/nvim-cmp',
     config = function()
       require "custom.configs.tabnine".tabnine()
     end
@@ -44,7 +34,8 @@ return {
   {
     "neovim/nvim-lspconfig",
     dependencies = {
-      "SmiteshP/nvim-navbuddy"
+      "SmiteshP/nvim-navbuddy",
+      "kevinhwang91/nvim-ufo",
     },
     config = function()
       require "plugins.configs.lspconfig"
@@ -96,10 +87,13 @@ return {
 --        end,
       },
     },
+    -- require("base46").toggle_theme();
+    require("base46").load_all_highlights(),
+    require("nvim-treesitter").highlight;
   },
   {
     "mfussenegger/nvim-jdtls",
-    opt = true 
+    opt = true
   },
   {
     "lewis6991/gitsigns.nvim",
@@ -130,7 +124,7 @@ return {
   },
   {
     "kevinhwang91/nvim-ufo",
-    requires = 'kevinhwang91/promise-async',
+    dependencies = 'kevinhwang91/promise-async',
     config = function()
       require "custom.configs.ufo"
     end

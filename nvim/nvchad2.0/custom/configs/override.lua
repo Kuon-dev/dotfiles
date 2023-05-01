@@ -31,12 +31,15 @@ M.treesitter = function()
     highlight = {
       enable = true,
       use_languagetree = true,
+      additional_vim_regex_highlighting = false,
     },
     ensure_installed = {
       "vim",
       "java",
       "html",
       "css",
+      "scss",
+      "cpp",
       "javascript",
       "typescript",
       "json",
@@ -49,6 +52,7 @@ M.treesitter = function()
       "ruby",
       "php",
     },
+    sync_install = true,
     autotag = {
       enable = true,
     },

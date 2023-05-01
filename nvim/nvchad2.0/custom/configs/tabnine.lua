@@ -1,20 +1,75 @@
 local M = {}
 
 M.cmp = function()
-  local present, cmp = pcall(require, "cmp")
-  local options = {
-    formatting = {
-      format = function(entry, vim_item)
-        if entry.source.name == 'cmp_tabnine' and entry.completion_item.data ~= nil then
-            vim_item.kind = string.format("%s %s", '', ' TabNine')
-        else
-          local icons = require("nvchad_ui.icons").lspkind
-          vim_item.kind = string.format("%s %s", icons[vim_item.kind], vim_item.kind)
-        end
+  local cmp = require "cmp"
 
-        return vim_item
+  local cmp_ui = require("core.utils").load_config().ui.cmp
+  local cmp_style = cmp_ui.style
+
+  local field_arrangement = {
+    atom = { "kind", "abbr", "menu" },
+    atom_colored = { "kind", "abbr", "menu" },
+  }
+
+  local formatting_style = {
+    -- default fields order i.e completion word + item.kind + item.kind icons
+    fields = field_arrangement[cmp_style] or { "abbr", "kind", "menu" },
+
+    format = function(_, item)
+      local icons = require("nvchad_ui.icons").lspkind
+      local icon = (cmp_ui.icons and icons[item.kind]) or ""
+
+      if cmp_style == "atom" or cmp_style == "atom_colored" then
+        icon = " " .. icon .. " "
+        item.menu = cmp_ui.lspkind_text and "   (" .. item.kind .. ")" or ""
+        item.kind = icon
+      elseif _.source.name == 'cmp_tabnine' and _.completion_item.data ~= nil then
+         item.kind = string.format("%s %s", '', ' TabNine')
+      else
+        icon = cmp_ui.lspkind_text and (" " .. icon .. " ") or icon
+        item.kind = string.format("%s %s", icon, cmp_ui.lspkind_text and item.kind or "")
+      end
+
+      return item
+    end,
+  }
+
+  local function border(hl_name)
+    return {
+      { "╭", hl_name },
+      { "─", hl_name },
+      { "╮", hl_name },
+      { "│", hl_name },
+      { "╯", hl_name },
+      { "─", hl_name },
+      { "╰", hl_name },
+      { "│", hl_name },
+    }
+  end
+
+  local options = {
+    completion = {
+      completeopt = "menu,menuone",
+    },
+
+    window = {
+      completion = {
+        side_padding = (cmp_style ~= "atom" and cmp_style ~= "atom_colored") and 1 or 0,
+        winhighlight = "Normal:CmpPmenu,CursorLine:CmpSel,Search:PmenuSel",
+        scrollbar = false,
+      },
+      documentation = {
+        border = border "CmpDocBorder",
+        winhighlight = "Normal:CmpDoc",
+      },
+    },
+    snippet = {
+      expand = function(args)
+        require("luasnip").lsp_expand(args.body)
       end,
     },
+
+    formatting = formatting_style,
     -- overriding default settings
     mapping = {
       ["<C-p>"] = cmp.mapping.select_prev_item(),
@@ -66,7 +121,6 @@ M.cmp = function()
 end
 
 M.tabnine = function()
-
   local present, tabnine = pcall(require, "cmp_tabnine.config")
   local config = {
     max_lines = 1000,

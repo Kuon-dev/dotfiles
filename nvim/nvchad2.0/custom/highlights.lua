@@ -17,10 +17,13 @@ local M = {
       bg = "black",
     },
   },
-
   overriden_hlgroups = {
-    AlphaHeader = {
-      fg = "blue",
+    CmpDoc= {
+      fg = "#e0e0e0",
+      bg = "none"
+    },
+    DiagnosticHint = {
+      fg = "#B4BEFE"
     },
     DiffAdd = {
       fg = "green",
