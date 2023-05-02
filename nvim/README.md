@@ -19,6 +19,11 @@ For NvChad 1.0, you have to run `:PackerSync` to install the plugins. For NvChad
 - Nvim ufo for better folds
 - LSP configs for Java
 
+Sample
+
+![image](https://cdn.discordapp.com/attachments/1089536612561588336/1102928729753268296/image.png)
+![image](https://cdn.discordapp.com/attachments/1089536612561588336/1102929254708166677/image.png)
+
 This setup is windows focused setup.
 
 ### LSP
