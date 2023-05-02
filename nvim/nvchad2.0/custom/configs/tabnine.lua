@@ -57,6 +57,7 @@ M.cmp = function()
         side_padding = (cmp_style ~= "atom" and cmp_style ~= "atom_colored") and 1 or 0,
         winhighlight = "Normal:CmpPmenu,CursorLine:CmpSel,Search:PmenuSel",
         scrollbar = false,
+        border = border "CmpBorder",
       },
       documentation = {
         border = border "CmpDocBorder",
@@ -110,8 +111,12 @@ M.cmp = function()
     sources = {
       { name = "cmp_tabnine" },
       { name = "luasnip" },
-      { name = "nvim_lsp" },
-      { name = "buffer" },
+      { name = "nvim_lsp",
+        max_item_count = 50,
+        entry_filter = function(entry, ctx)
+          return require("cmp").lsp.CompletionItemKind.Text ~= entry:get_kind()
+        end,
+      },
       { name = "nvim_lua" },
       { name = "path" },
     },

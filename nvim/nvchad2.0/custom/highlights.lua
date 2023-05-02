@@ -1,3 +1,4 @@
+vim.cmd("highlight DiagnosticUnnecessary guifg=#F0000")
 
 local M = {
 
@@ -23,6 +24,9 @@ local M = {
       bg = "none"
     },
     DiagnosticHint = {
+      fg = "#B4BEFE"
+    },
+    DiagnosticUnnecessary = {
       fg = "#B4BEFE"
     },
     DiffAdd = {

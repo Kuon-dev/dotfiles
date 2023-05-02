@@ -89,7 +89,7 @@ return {
     },
     -- require("base46").toggle_theme();
     require("base46").load_all_highlights(),
-    require("nvim-treesitter").highlight;
+    -- require("nvim-treesitter").highlight;
   },
   {
     "mfussenegger/nvim-jdtls",

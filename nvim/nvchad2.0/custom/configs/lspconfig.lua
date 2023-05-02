@@ -14,7 +14,7 @@ local servers = {
 
   "clangd",
   --"vuels",
-  "volar",
+   "volar",
   "solargraph",
   "r_language_server",
   "intelephense",
