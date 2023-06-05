@@ -21,7 +21,6 @@ local options = {
 }
 
 
-
 for k, v in pairs(options) do
   vim.opt[k] = v
 end
@@ -45,3 +44,4 @@ for i = 1, 9, 1 do
   end)
 end
 
+vim.keymap.set("i", "<M-BS>", "<Esc>cvb", { noremap = true, silent = true })

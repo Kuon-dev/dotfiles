@@ -4,8 +4,8 @@ local M = {
 
   new_hlgroups = {
     -- Neorg
-    NeorgCodeBlock = { 
-      bg = "darkerblack" 
+    NeorgCodeBlock = {
+      bg = "darkerblack"
     },
 
     NeorgMarkUpBold = {
@@ -33,7 +33,5 @@ local M = {
       fg = "green",
     }
   },
-
-
 }
 return M

@@ -1,22 +1,11 @@
 local pluginConfs = require "custom.configs.tabnine"
 
 return {
-  --[[
-  {
-    "catppuccin/nvim",
-    lazy = false,
-    name = "catppuccin",
-    config = function()
-      require("catppuccin").setup({
-        transparent_background = true,
-      })
-      vim.cmd.colorscheme "catppuccin"
-    end
-  },
-]]--
+  -- mandatory plugins
   {
     "hrsh7th/nvim-cmp",
     dependencies = {
+      "roobert/tailwindcss-colorizer-cmp.nvim",
       "tzachar/cmp-tabnine"
     },
     config = function()
@@ -25,10 +14,19 @@ return {
   },
   {
     "tzachar/cmp-tabnine",
-    build = "powershell ./install.ps1",
+    build = "powershell ./install.ps1", -- this is windows setup
     dependencies = 'hrsh7th/nvim-cmp',
     config = function()
       require "custom.configs.tabnine".tabnine()
+    end
+  },
+  {
+    "roobert/tailwindcss-colorizer-cmp.nvim",
+    -- optionally, override the default options:
+    config = function()
+      require("tailwindcss-colorizer-cmp").setup({
+        color_square_width = 2,
+      })
     end
   },
   {
@@ -80,12 +78,6 @@ return {
   {
     "NvChad/ui",
     override_options = {
-      statusline = {
-        separator_style = "arrow",
---        overriden_modules = function()
---          return require "custom.statusline"
---        end,
-      },
     },
     -- require("base46").toggle_theme();
     require("base46").load_all_highlights(),
@@ -166,5 +158,14 @@ return {
     config = function()
       require "custom.configs.navbuddy"
     end
+  },
+  {
+    "folke/todo-comments.nvim",
+    dependencies = { "nvim-lua/plenary.nvim" },
+    opts = {
+      -- your configuration comes here
+      -- or leave it empty to use the default settings
+      -- refer to the configuration section below
+    }
   },
 }

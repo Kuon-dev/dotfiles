@@ -134,7 +134,7 @@ M.tabnine = function()
     run_on_every_keystroke = true,
     show_prediction_strength = false
   }
-  tabnine.setup(config)
+  tabnine:setup(config)
   -- return config 
 end
 

@@ -5,7 +5,10 @@ M.core = {
   n = {
     ["<C-m>"] = { "<cmd>:%s/\r//g<CR>", "set file endings to unix (LF)"},
     ["x"] = { '"_x', "delete without yank", opts = opt},
-  }
+    ["<Leader>i"] = { 'ci"', "Replace strings"},
+  },
+  i = {
+  },
 }
 
 M.undo = {
@@ -15,6 +18,7 @@ M.undo = {
   i = {
     ["<C-z>"] = { "u", "undo"},
   },
+
   v = {
     ["<C-z>"] = { "u", "undo"},
   }

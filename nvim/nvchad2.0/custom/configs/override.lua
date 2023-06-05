@@ -28,6 +28,14 @@ M.treesitter = function()
   local present, treesitter = pcall(require, "nvim-treesitter.configs")
 
   local options = {
+    incremental_selection = {
+      enable = true,
+      keymaps = {
+        init_selection = "<Enter>",
+        node_incremental = "<Enter>",
+        node_decremental = "<BS>",
+      },
+    },
     highlight = {
       enable = true,
       use_languagetree = true,
@@ -67,11 +75,59 @@ M.nvimtree = function()
 
   local present, nvimtree = pcall(require, "nvim-tree")
   local options = {
+  filters = {
+      dotfiles = false,
+      custom = { "node_modules" },
+    },
     git = {
       enable = false,
     },
-  }
- nvimtree.setup(options)
+    hijack_unnamed_buffer_when_opening = true,
+    hijack_cursor = true,
+    diagnostics = {
+      enable = false,
+      show_on_dirs = false,
+      debounce_delay = 50,
+      icons = {
+        hint = "",
+        info = "",
+        warning = "",
+        error = "",
+      },
+    },
+    system_open = { cmd = "thunar" },
+    sync_root_with_cwd = true,
+    renderer = {
+      highlight_opened_files = "name",
+      highlight_git = true,
+      group_empty = true,
+      icons = {
+        show = {
+          git = true,
+        },
+        glyphs = {
+          git = {
+            unstaged = "",
+            -- unstaged = "",
+            staged = "",
+            unmerged = "",
+            renamed = "➜",
+            -- untracked = "",
+            untracked = "",
+            deleted = "",
+            ignored = "◌",
+          },
+        },
+      },
+    },
+    tab = {
+      sync = {
+        open = true,
+        close = true,
+      },
+    },
+    }
+   nvimtree.setup(options)
 end
 
 M.blankline = function()
