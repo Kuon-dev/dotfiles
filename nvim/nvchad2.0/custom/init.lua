@@ -1,5 +1,4 @@
 local autocmd = vim.api.nvim_create_autocmd
-local cmd = vim.cmd
 local set = vim.opt
 
 local options = {
@@ -36,7 +35,7 @@ autocmd("InsertLeave", {
 
 set.clipboard:prepend { 'unnamed', 'unnamedplus' }
 
-cmd("filetype plugin indent on")
+-- cmd("filetype plugin indent on")
 
 for i = 1, 9, 1 do
   vim.keymap.set("n", string.format("<A-%s>", i), function()

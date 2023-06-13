@@ -32,6 +32,19 @@ M.nvimtree = {
     ["<C-p>"] = { "<cmd> NvimTreeToggle <CR>", "toggle nvimtree" },
     ["<C-e>"] = { "<cmd> NvimTreeFocus <CR>", "focus nvimtree" },
     ["<Leader>p"] = { "<cmd> NvimTreeFindFile <CR>", "toggle nvimtree" },
+    ["gh"] = { "<cmd>Lspsaga lsp_finder<CR>", "LSP Saga Finder" },
+    ["<Leader>ca"] = { "<cmd>Lspsaga code_action<CR>", "Code Action" },
+    ["gr"] = { "<cmd>Lspsaga rename<CR>", "Rename All Occurrences" },
+    ["gp"] = { "<cmd>Lspsaga peek_definition<CR>", "Peek Definition" },
+    ["gd"] = { "<cmd>Lspsaga goto_definition<CR>", "Go to Definition" },
+    ["gt"] = { "<cmd>Lspsaga peek_type_definition<CR>", "Peek Type Definition" },
+    ["<Leader>sl"] = { "<cmd>Lspsaga show_line_diagnostics<CR>", "Show Line Diagnostics" },
+    ["<Leader>sb"] = { "<cmd>Lspsaga show_buf_diagnostics<CR>", "Show Buffer Diagnostics" },
+    ["<Leader>sw"] = { "<cmd>Lspsaga show_workspace_diagnostics<CR>", "Show Workspace Diagnostics" },
+    ["<Leader>sc"] = { "<cmd>Lspsaga show_cursor_diagnostics<CR>", "Show Cursor Diagnostics" },
+    ["[e"] = { "<cmd>Lspsaga diagnostic_jump_prev<CR>", "Diagnostic Jump Previous" },
+    ["]e"] = { "<cmd>Lspsaga diagnostic_jump_next<CR>", "Diagnostic Jump Next" },
+
 
 
     [";p"] = {
@@ -66,24 +79,6 @@ M.telescope = {
     -- theme switcher
     ["<leader>th"] = { "<cmd> Telescope themes <CR>", "nvchad themes" },
   },
-}
-
-M.lspsaga = {
-  plugin = true,
-
-  n = {
-    ["<C-j>"] = { 
-      "<cmd> Lspsaga diagnostic_jump_next <CR>", 
-      "jump to next diagnostic", 
-    },
-  },
-  v = {
-    ["<C-j>"] = { 
-      "<cmd> Lspsaga diagnostic_jump_next <CR>", 
-      "jump to next diagnostic",
-    },
-  },
-
 }
 
 M.gitsigns = {

@@ -77,8 +77,7 @@ return {
   },
   {
     "NvChad/ui",
-    override_options = {
-    },
+    lazy = false,
     -- require("base46").toggle_theme();
     require("base46").load_all_highlights(),
     -- require("nvim-treesitter").highlight;
@@ -103,9 +102,10 @@ return {
   },
   {
     "nvim-tree/nvim-tree.lua",
-    config = function()
+    config = function(_, opts)
       require "plugins.configs.nvimtree"
       require "custom.configs.override".nvimtree()
+      vim.g.nvimtree_side = opts.view.side
     end
   },
   {
@@ -166,6 +166,18 @@ return {
       -- your configuration comes here
       -- or leave it empty to use the default settings
       -- refer to the configuration section below
+    }
+  },
+  {
+    "glepnir/lspsaga.nvim",
+    event = "LspAttach",
+    config = function()
+        require("lspsaga").setup({})
+    end,
+    dependencies = {
+      {"nvim-tree/nvim-web-devicons"},
+      --Please make sure you install markdown and markdown_inline parser
+      {"nvim-treesitter/nvim-treesitter"}
     }
   },
 }

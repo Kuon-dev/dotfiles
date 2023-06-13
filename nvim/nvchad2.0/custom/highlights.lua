@@ -1,4 +1,5 @@
 vim.cmd("highlight DiagnosticUnnecessary guifg=#F0000")
+vim.cmd("highlight Tag guifg=#39a4ff")
 
 local M = {
 
@@ -31,7 +32,12 @@ local M = {
     },
     DiffAdd = {
       fg = "green",
+    },
+    Function = {
+      fg = "#39a4ff"
     }
   },
 }
+
+
 return M

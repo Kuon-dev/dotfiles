@@ -70,7 +70,6 @@ M.cmp = function()
       end,
     },
 
-    formatting = formatting_style,
     -- overriding default settings
     mapping = {
       ["<C-p>"] = cmp.mapping.select_prev_item(),
