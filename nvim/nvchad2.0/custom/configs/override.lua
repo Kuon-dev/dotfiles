@@ -55,6 +55,15 @@ M.treesitter = function()
       enable = true,
       disable = {},
     },
+    inject = {
+      enable = true, -- Enable language injection
+      languages = {
+        javascript = {"html"}, -- Inject HTML into JavaScript
+      },
+    },
+    autotag = {
+      enable = true,
+    }
   }
   treesitter.setup(options)
 end

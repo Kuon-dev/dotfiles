@@ -1,39 +1,100 @@
+local copilot_status_ok, copilot_cmp_comparators = pcall(require, "copilot_cmp.comparators")
 local M = {}
 
-M.cmp = function()
-  local cmp = require "cmp"
+local function deprioritize_snippet(entry1, entry2)
+  local types = require "cmp.types"
 
+  if entry1:get_kind() == types.lsp.CompletionItemKind.Snippet then
+    return false
+  end
+  if entry2:get_kind() == types.lsp.CompletionItemKind.Snippet then
+    return true
+  end
+end
+
+local function under(entry1, entry2)
+  local _, entry1_under = entry1.completion_item.label:find "^_+"
+  local _, entry2_under = entry2.completion_item.label:find "^_+"
+  entry1_under = entry1_under or 0
+  entry2_under = entry2_under or 0
+  if entry1_under > entry2_under then
+    return false
+  elseif entry1_under < entry2_under then
+    return true
+  end
+end
+
+local function limit_lsp_types(entry, ctx)
+  local kind = entry:get_kind()
+  local line = ctx.cursor.line
+  local col = ctx.cursor.col
+  local char_before_cursor = string.sub(line, col - 1, col - 1)
+  local char_after_dot = string.sub(line, col, col)
+  local types = require "cmp.types"
+
+  if char_before_cursor == "." and char_after_dot:match "[a-zA-Z]" then
+    if
+      kind == types.lsp.CompletionItemKind.Method
+      or kind == types.lsp.CompletionItemKind.Field
+      or kind == types.lsp.CompletionItemKind.Property
+    then
+      return true
+    else
+      return false
+    end
+  elseif string.match(line, "^%s+%w+$") then
+    if kind == types.lsp.CompletionItemKind.Function or kind == types.lsp.CompletionItemKind.Variable then
+      return true
+    else
+      return false
+    end
+  end
+
+  if kind == require("cmp").lsp.CompletionItemKind.Text then
+    return false
+  end
+
+  return true
+end
+
+local has_words_before = function()
+  if vim.api.nvim_buf_get_option(0, "buftype") == "prompt" then return false end
+  local line, col = unpack(vim.api.nvim_win_get_cursor(0))
+  return col ~= 0 and vim.api.nvim_buf_get_text(0, line-1, 0, line-1, col, {})[1]:match("^%s*$") == nil
+end
+
+local function get_lsp_completion_context(completion, source)
+  local ok, source_name = pcall(function()
+    return source.source.client.config.name
+  end)
+  if not ok then
+    return nil
+  end
+  if source_name == "tsserver" or source_name == "typescript-tools" then
+    return completion.detail
+  elseif source_name == "pyright" then
+    if completion.labelDetails ~= nil then
+      return completion.labelDetails.description
+    end
+  end
+end
+
+local buffer_option = {
+  -- Complete from all visible buffers (splits)
+  get_bufnrs = function()
+    local bufs = {}
+    for _, win in ipairs(vim.api.nvim_list_wins()) do
+      bufs[vim.api.nvim_win_get_buf(win)] = true
+    end
+    return vim.tbl_keys(bufs)
+  end,
+}
+
+local cmp = require "cmp"
+
+M.cmp = function()
   local cmp_ui = require("core.utils").load_config().ui.cmp
   local cmp_style = cmp_ui.style
-
-  local field_arrangement = {
-    atom = { "kind", "abbr", "menu" },
-    atom_colored = { "kind", "abbr", "menu" },
-  }
-
-  local formatting_style = {
-    -- default fields order i.e completion word + item.kind + item.kind icons
-    fields = field_arrangement[cmp_style] or { "abbr", "kind", "menu" },
-
-    format = function(_, item)
-      local icons = require("nvchad_ui.icons").lspkind
-      local icon = (cmp_ui.icons and icons[item.kind]) or ""
-
-      if cmp_style == "atom" or cmp_style == "atom_colored" then
-        icon = " " .. icon .. " "
-        item.menu = cmp_ui.lspkind_text and "   (" .. item.kind .. ")" or ""
-        item.kind = icon
-      elseif _.source.name == 'cmp_tabnine' and _.completion_item.data ~= nil then
-         item.kind = string.format("%s %s", '', ' TabNine')
-      else
-        icon = cmp_ui.lspkind_text and (" " .. icon .. " ") or icon
-        item.kind = string.format("%s %s", icon, cmp_ui.lspkind_text and item.kind or "")
-      end
-
-      return item
-    end,
-  }
-
   local function border(hl_name)
     return {
       { "╭", hl_name },
@@ -46,82 +107,103 @@ M.cmp = function()
       { "│", hl_name },
     }
   end
-
   local options = {
+
+  window = {
     completion = {
-      completeopt = "menu,menuone",
+      side_padding = (cmp_style ~= "atom" and cmp_style ~= "atom_colored") and 1 or 0,
+      winhighlight = "Normal:CmpPmenu,CursorLine:CmpSel,Search:PmenuSel",
+      scrollbar = false,
+      border = border "CmpBorder",
     },
-
-    window = {
-      completion = {
-        side_padding = (cmp_style ~= "atom" and cmp_style ~= "atom_colored") and 1 or 0,
-        winhighlight = "Normal:CmpPmenu,CursorLine:CmpSel,Search:PmenuSel",
-        scrollbar = false,
-        border = border "CmpBorder",
-      },
-      documentation = {
-        border = border "CmpDocBorder",
-        winhighlight = "Normal:CmpDoc",
-      },
+    documentation = {
+      border = border "CmpDocBorder",
+      winhighlight = "Normal:CmpDoc",
     },
-    snippet = {
-      expand = function(args)
-        require("luasnip").lsp_expand(args.body)
-      end,
+  },
+  completion = {
+    completeopt = "menu,menuone,noinsert,noselect",
+    autocomplete = { require("cmp.types").cmp.TriggerEvent.TextChanged },
+    keyword_length = 2,
+  },
+  experimental = {
+    ghost_text = {
+      hl_group = "Comment",
     },
-
-    -- overriding default settings
-    mapping = {
-      ["<C-p>"] = cmp.mapping.select_prev_item(),
-      ["<C-n>"] = cmp.mapping.select_next_item(),
-      ["<C-d>"] = cmp.mapping.scroll_docs(-4),
-      ["<C-f>"] = cmp.mapping.scroll_docs(4),
-      ["<C-Space>"] = cmp.mapping.complete(),
-      ["<C-e>"] = cmp.mapping.close(),
-      ["<CR>"] = cmp.mapping.confirm {
-        behavior = cmp.ConfirmBehavior.Replace,
-        select = false,
-      },
-      ["<Tab>"] = cmp.mapping(function(fallback)
-        if cmp.visible() then
-          cmp.select_next_item()
-        elseif require("luasnip").expand_or_jumpable() then
-          vim.fn.feedkeys(vim.api.nvim_replace_termcodes("<Plug>luasnip-expand-or-jump", true, true, true), "")
-        else
-          fallback()
-        end
-      end, {
-        "i",
-        "s",
-      }),
-      ["<S-Tab>"] = cmp.mapping(function(fallback)
-        if cmp.visible() then
-          cmp.select_prev_item()
-        elseif require("luasnip").jumpable(-1) then
-          vim.fn.feedkeys(vim.api.nvim_replace_termcodes("<Plug>luasnip-jump-prev", true, true, true), "")
-        else
-          fallback()
-        end
-      end, {
-        "i",
-        "s",
-      }),
+  },
+  mapping = {
+    ["<Up>"] = require("cmp").mapping.select_prev_item(),
+    ["<Down>"] = require("cmp").mapping.select_next_item(),
+    ["<Tab>"] = vim.schedule_wrap(function(fallback)
+      if cmp.visible() and has_words_before() then
+        cmp.select_next_item({ behavior = cmp.SelectBehavior.Select })
+      else
+        fallback()
+      end
+    end),
+    ['<CR>'] = cmp.mapping.confirm({
+      -- documentation says this is important.
+      -- I don't know why.
+      behavior = cmp.ConfirmBehavior.Replace,
+      select = false,
+    })
+  },
+  performance = {
+    debounce = 150,
+    throttle = 60,
+    -- max_view_entries = 10,
+    fetching_timeout = 200,
+  },
+  snippet = {
+    expand = function(args)
+      require("luasnip").lsp_expand(args.body)
+    end,
+  },
+  sources = {
+    {
+      name = "copilot",
+      max_item_count = 5,
     },
-    sources = {
-      { name = "cmp_tabnine" },
-      { name = "luasnip" },
-      { name = "nvim_lsp",
+    {
+      name = "cmp_tabnine",
+    },
+    { name = "luasnip" },
+    { name = "nvim_lsp",
         max_item_count = 50,
         entry_filter = function(entry, ctx)
           return require("cmp").lsp.CompletionItemKind.Text ~= entry:get_kind()
         end,
+    },
+    { name = "nvim_lua" },
+    { name = "path" },
+  },
+  matching = {
+    disallow_fuzzy_matching = true,
+    disallow_fullfuzzy_matching = true,
+    disallow_partial_fuzzy_matching = true,
+    disallow_partial_matching = false,
+    disallow_prefix_unmatching = true,
+  },
+  sorting = {
+    priority_weight = 2,
+    comparators = {
+      copilot_cmp_comparators.prioritize,
+      -- Below is the default comparitor list and order for nvim-cmp
+      cmp.config.compare.offset,
+      -- cmp.config.compare.scopes, --this is commented in nvim-cmp too
+      cmp.config.compare.exact,
+      cmp.config.compare.score,
+      cmp.config.compare.recently_used,
+      cmp.config.compare.locality,
+      cmp.config.compare.kind,
+      cmp.config.compare.sort_text,
+      cmp.config.compare.length,
+      cmp.config.compare.order,
       },
-      { name = "nvim_lua" },
-      { name = "path" },
     },
   }
+
   cmp.setup(options)
-  -- return options
 end
 
 M.tabnine = function()
@@ -138,3 +220,6 @@ M.tabnine = function()
 end
 
 return M
+
+
+-- old mapping configs

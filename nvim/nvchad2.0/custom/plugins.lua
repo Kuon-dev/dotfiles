@@ -4,21 +4,76 @@ return {
   -- mandatory plugins
   {
     "hrsh7th/nvim-cmp",
-    dependencies = {
-      "roobert/tailwindcss-colorizer-cmp.nvim",
-      "tzachar/cmp-tabnine"
-    },
-    config = function()
+    opts =  require "custom.configs.tabnine".cmp(),
+   config = function()
       require "custom.configs.tabnine".cmp()
+    end,
+    dependencies = {
+      "delphinus/cmp-ctags",
+      "hrsh7th/cmp-nvim-lsp-document-symbol",
+      "roobert/tailwindcss-colorizer-cmp.nvim",
+      "ray-x/cmp-treesitter",
+      {
+        "tzachar/cmp-tabnine",
+        build = "powershell ./install.ps1", -- windows only
+        config = function()
+          require "custom.configs.tabnine".tabnine()
+        end,
+      },
+      {
+        "L3MON4D3/LuaSnip",
+        config = function(_, opts)
+          require("plugins.configs.others").luasnip(opts)
+          require "custom.configs.luasnip"
+        end,
+      },
+    },
+  },
+  {
+    "github/copilot.vim",
+    lazy = false,
+    config = function()
+      require "custom.configs.copilot"
     end,
   },
   {
-    "tzachar/cmp-tabnine",
-    build = "powershell ./install.ps1", -- this is windows setup
-    dependencies = 'hrsh7th/nvim-cmp',
+    "zbirenbaum/copilot.lua",
+    event = "InsertEnter",
+    dependencies = {
+      {
+        "zbirenbaum/copilot-cmp",
+        config = function()
+          require("copilot_cmp").setup()
+        end,
+      },
+    },
     config = function()
-      require "custom.configs.tabnine".tabnine()
-    end
+      require("copilot").setup {
+        suggestion = {
+          enabled = false,
+          keymap = {
+            accept = "<C-]>",
+            accept_word = false,
+            accept_line = false,
+            next = "<M-]>",
+            prev = "<M-[>",
+            dismiss = "<C-[>",
+          },
+        },
+        -- panel = {
+          -- enabled = false,
+        -- },
+        server_opts_overrides = {
+          trace = "verbose",
+          settings = {
+            advanced = {
+              listCount = 3,
+              inlineSuggestCount = 3,
+            },
+          },
+        },
+      }
+    end,
   },
   {
     "roobert/tailwindcss-colorizer-cmp.nvim",
@@ -122,14 +177,6 @@ return {
     end
   },
   {
-    "L3MON4D3/LuaSnip",
-    wants = "friendly-snippets",
-    after = "nvim-cmp",
-    config = function()
-      require "custom.configs.luasnip"
-    end
-  },
-  {
     "SmiteshP/nvim-navic"
   },
   {
@@ -180,4 +227,34 @@ return {
       {"nvim-treesitter/nvim-treesitter"}
     }
   },
+  {
+    "folke/todo-comments.nvim",
+    dependencies = { "nvim-lua/plenary.nvim" },
+    lazy = false,
+    opts = {
+      -- your configuration comes here
+      -- or leave it empty to use the default settings
+      -- refer to the configuration section below
+    }
+  },
+  {
+    "folke/flash.nvim",
+    event = "VeryLazy",
+    opts = {},
+  },
+  {
+    "pmizio/typescript-tools.nvim",
+    dependencies = {"neovim/nvim-lspconfig"},
+    opts = {
+
+    },
+  },
+  {
+  'Wansmer/treesj',
+    keys = { '<space>m', '<space>j', '<space>s' },
+    dependencies = { 'nvim-treesitter/nvim-treesitter' },
+    config = function()
+      require('treesj').setup({--[[ your config ]]})
+    end,
+  }
 }
