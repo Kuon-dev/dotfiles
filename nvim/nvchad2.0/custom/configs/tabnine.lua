@@ -146,7 +146,17 @@ M.cmp = function()
       -- I don't know why.
       behavior = cmp.ConfirmBehavior.Replace,
       select = false,
-    })
+    }),
+    ["<ESC>"] = require("cmp").mapping(function(fallback)
+      if require("cmp").visible() then
+        require("cmp").abort()
+      else
+        fallback()
+      end
+    end, {
+      "i",
+      "s",
+    }),
   },
   performance = {
     debounce = 150,

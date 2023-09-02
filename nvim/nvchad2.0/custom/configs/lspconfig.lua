@@ -18,6 +18,7 @@ local servers = {
   "solargraph",
   "r_language_server",
   "intelephense",
+  "graphql",
 }
 
 for _, lsp in ipairs(servers) do

@@ -37,6 +37,14 @@ return {
     end,
   },
   {
+    "NvChad/nvterm",
+    opts = {
+      terminals = {
+        shell = "pwsh.exe -NoLogo",
+      },
+    },
+  },
+  {
     "zbirenbaum/copilot.lua",
     event = "InsertEnter",
     dependencies = {
@@ -89,6 +97,7 @@ return {
     dependencies = {
       "SmiteshP/nvim-navbuddy",
       "kevinhwang91/nvim-ufo",
+      "folke/trouble.nvim",
     },
     config = function()
       require "plugins.configs.lspconfig"
@@ -256,5 +265,15 @@ return {
     config = function()
       require('treesj').setup({--[[ your config ]]})
     end,
+  },
+  {
+      "kylechui/nvim-surround",
+      version = "*", -- Use for stability; omit to use `main` branch for the latest features
+      event = "VeryLazy",
+      config = function()
+          require("nvim-surround").setup({
+              -- Configuration here, or leave empty to use defaults
+          })
+      end
   }
 }

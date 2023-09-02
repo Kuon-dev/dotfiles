@@ -11,6 +11,16 @@ M.core = {
   },
 }
 
+M.trouble = {
+  n = {
+    ["<Leader>ta"] = { "<cmd>TroubleToggle<cr>", "Toggle trouble"},
+    ["<Leader>tq"] = { "<cmd>TroubleToggle quickfix<cr>", "Toggle trouble quickfix"},
+    ["<Leader>tx"] = { "<cmd>TroubleClose <cr>", "Close Trouble"},
+    ["<Leader>td"] = { "<cmd>TroubleToggle lsp_definitions<cr>", "Trouble Definitions"},
+    ["<Leader>tr"] = { "<cmd>TroubleToggle lsp_references<cr>", "Trouble References"},
+  }
+}
+
 M.undo = {
   n = {
     ["<C-z>"] = { "u", "undo"},
