@@ -1,7 +1,45 @@
 local pluginConfs = require "custom.configs.tabnine"
 
-return {
-  -- mandatory plugins
+local defaultOverrides = {
+  {
+    "NvChad/ui",
+    lazy = false,
+    -- require("base46").toggle_theme();
+    require("base46").load_all_highlights(),
+    -- require("nvim-treesitter").highlight;
+  },
+  {
+    "NvChad/nvterm",
+    opts = {
+      terminals = {
+        shell = "pwsh.exe -NoLogo",
+      },
+    },
+  },
+  {
+    "nvim-treesitter/nvim-treesitter",
+    config = function()
+      require "plugins.configs.treesitter"
+      require "custom.configs.override".treesitter()
+    end
+  },
+  {
+    "nvim-telescope/telescope.nvim",
+    lazy = false,
+    config = function()
+      require "plugins.configs.telescope"
+      require "custom.configs.override".telescope()
+    end,
+  },
+  {
+    "windwp/nvim-autopairs",
+    config = function()
+      require "custom.configs.autopairs"
+    end,
+  },
+}
+
+local autoComplete = {
   {
     "hrsh7th/nvim-cmp",
     opts =  require "custom.configs.tabnine".cmp(),
@@ -35,14 +73,6 @@ return {
     config = function()
       require "custom.configs.copilot"
     end,
-  },
-  {
-    "NvChad/nvterm",
-    opts = {
-      terminals = {
-        shell = "pwsh.exe -NoLogo",
-      },
-    },
   },
   {
     "zbirenbaum/copilot.lua",
@@ -83,15 +113,10 @@ return {
       }
     end,
   },
-  {
-    "roobert/tailwindcss-colorizer-cmp.nvim",
-    -- optionally, override the default options:
-    config = function()
-      require("tailwindcss-colorizer-cmp").setup({
-        color_square_width = 2,
-      })
-    end
-  },
+
+}
+
+local lspPlugins = {
   {
     "neovim/nvim-lspconfig",
     dependencies = {
@@ -105,72 +130,41 @@ return {
     end,
   },
   {
-    "windwp/nvim-ts-autotag",
-    ft = { "html", "javascriptreact", "vue" },
-    after = "nvim-treesitter",
+    "glepnir/lspsaga.nvim",
+    event = "LspAttach",
     config = function()
-      require "custom.configs.override".autotag()
+        require("lspsaga").setup({})
     end,
+    dependencies = {
+      {"nvim-tree/nvim-web-devicons"},
+      --Please make sure you install markdown and markdown_inline parser
+      {"nvim-treesitter/nvim-treesitter"}
+    }
+  },
+}
 
-  },
-  {
-    "windwp/nvim-autopairs",
-    config = function()
-      require "custom.configs.autopairs"
-    end,
-
-  },
-  {
-    "jose-elias-alvarez/null-ls.nvim",
-    after = "nvim-lspconfig",
-    config = function()
-       require "custom.configs.null-ls"
-    end,
-  },
-  {
-    "editorconfig/editorconfig-vim",
-    after = "nvim-lspconfig"
-  },
-  {
-    "nvim-telescope/telescope.nvim",
-    lazy = false,
-    config = function()
-      require "plugins.configs.telescope"
-      require "custom.configs.override".telescope()
-    end,
-  },
-  {
-    "NvChad/ui",
-    lazy = false,
-    -- require("base46").toggle_theme();
-    require("base46").load_all_highlights(),
-    -- require("nvim-treesitter").highlight;
-  },
+local lspServers = {
   {
     "mfussenegger/nvim-jdtls",
     opt = true
   },
   {
-    "lewis6991/gitsigns.nvim",
-    config = function()
-      -- require("plugins.configs.others").gitsigns()
-      require "custom.configs.gitsigns"
-    end
+    "pmizio/typescript-tools.nvim",
+    dependencies = {"neovim/nvim-lspconfig"},
+    opts = {
+
+    },
   },
+}
+
+local qolPlugins = {
   {
-    "nvim-treesitter/nvim-treesitter",
+    "windwp/nvim-ts-autotag",
+    ft = { "html", "javascriptreact", "vue", "typescriptreact" },
+    after = "nvim-treesitter",
     config = function()
-      require "plugins.configs.treesitter"
-      require "custom.configs.override".treesitter()
-    end
-  },
-  {
-    "nvim-tree/nvim-tree.lua",
-    config = function(_, opts)
-      require "plugins.configs.nvimtree"
-      require "custom.configs.override".nvimtree()
-      vim.g.nvimtree_side = opts.view.side
-    end
+      require "custom.configs.override".autotag()
+    end,
   },
   {
     "lukas-reineke/indent-blankline.nvim",
@@ -218,45 +212,12 @@ return {
   {
     "folke/todo-comments.nvim",
     dependencies = { "nvim-lua/plenary.nvim" },
-    opts = {
-      -- your configuration comes here
-      -- or leave it empty to use the default settings
-      -- refer to the configuration section below
-    }
-  },
-  {
-    "glepnir/lspsaga.nvim",
-    event = "LspAttach",
-    config = function()
-        require("lspsaga").setup({})
-    end,
-    dependencies = {
-      {"nvim-tree/nvim-web-devicons"},
-      --Please make sure you install markdown and markdown_inline parser
-      {"nvim-treesitter/nvim-treesitter"}
-    }
-  },
-  {
-    "folke/todo-comments.nvim",
-    dependencies = { "nvim-lua/plenary.nvim" },
     lazy = false,
     opts = {
       -- your configuration comes here
       -- or leave it empty to use the default settings
       -- refer to the configuration section below
     }
-  },
-  {
-    "folke/flash.nvim",
-    event = "VeryLazy",
-    opts = {},
-  },
-  {
-    "pmizio/typescript-tools.nvim",
-    dependencies = {"neovim/nvim-lspconfig"},
-    opts = {
-
-    },
   },
   {
   'Wansmer/treesj',
@@ -275,5 +236,56 @@ return {
               -- Configuration here, or leave empty to use defaults
           })
       end
+  },
+
+}
+
+local gitPlugins = {
+  {
+    "lewis6991/gitsigns.nvim",
+    config = function()
+      -- require("plugins.configs.others").gitsigns()
+      require "custom.configs.gitsigns"
+    end
+  },
+  {
+    "kdheepak/lazygit.nvim",
+    -- optional for floating window border decoration
+    requires = {
+        "nvim-lua/plenary.nvim",
+    },
   }
+
+
+}
+
+return {
+  -- mandatory plugins
+  defaultOverrides,
+  autoComplete,
+  lspPlugins,
+  lspServers,
+  qolPlugins,
+  gitPlugins,
+  {
+    "roobert/tailwindcss-colorizer-cmp.nvim",
+    -- optionally, override the default options:
+    config = function()
+      require("tailwindcss-colorizer-cmp").setup({
+        color_square_width = 2,
+      })
+    end
+  },
+  {
+    "editorconfig/editorconfig-vim",
+    after = "nvim-lspconfig"
+  },
+  {
+    "nvim-tree/nvim-tree.lua",
+    config = function(_, opts)
+      require "plugins.configs.nvimtree"
+      require "custom.configs.override".nvimtree()
+      vim.g.nvimtree_side = opts.view.side
+    end
+  },
 }

@@ -24,7 +24,7 @@ local colors = {
   "highlight DiffChangeDelete guibg=NONE guifg=#fae3b0",
 }
 
-for _, i in pairs(colors) do 
+for _, i in pairs(colors) do
   vim.cmd(i)
 end
 

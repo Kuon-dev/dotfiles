@@ -9,7 +9,7 @@ local servers = {
   "jsonls",
   "eslint",
   "cssls",
-  "tailwindcss",
+  -- "tailwindcss",
   "pyright",
 
   "clangd",
@@ -18,19 +18,51 @@ local servers = {
   "solargraph",
   "r_language_server",
   "intelephense",
-  "graphql",
+  -- "graphql",
 }
+
+local function custom_on_attach(client, bufnr)
+  on_attach(client, bufnr)  -- Call the existing function first
+
+  if not client.server_capabilities.semanticTokensProvider then
+    print("Restart of LSP client may be needed")
+    -- client.stop()
+    -- vim.defer_fn(function ()
+    --   lspconfig[client.name].setup {
+    --     on_attach = custom_on_attach,
+    --     capabilities = capabilities,
+    --   }
+    -- end, 1000)
+  end
+end
+
 
 for _, lsp in ipairs(servers) do
   lspconfig[lsp].setup {
-    on_attach = on_attach,
+    on_attach = custom_on_attach,
     capabilities = capabilities,
   }
+end
+
+
+local function organize_imports()
+  local params = {
+    command = "_typescript.organizeImports",
+    arguments = { vim.api.nvim_buf_get_name(0) },
+    title = ""
+  }
+  vim.lsp.buf.execute_command(params)
 end
 
 require("typescript-tools").setup {
   on_attach = on_attach,
   capabilities = capabilities,
+  init_options = {
+    preferences = {
+      disableSuggestions = true,
+    }
+  },
+  root_dir = require('lspconfig.util').root_pattern('.git'),
   settings = {
     -- spawn additional tsserver instance to calculate diagnostics on it
     separate_diagnostic_server = true,
@@ -51,6 +83,12 @@ require("typescript-tools").setup {
     -- described below
     tsserver_format_options = {},
     tsserver_file_preferences = {},
+  },
+  commands = {
+    OrganizeImports = {
+      organize_imports,
+      description = "Organize Imports"
+    }
   }
 };
 
@@ -67,3 +105,5 @@ lspconfig.emmet_ls.setup({
       },
     }
 })
+
+

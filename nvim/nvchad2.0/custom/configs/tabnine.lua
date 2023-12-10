@@ -179,12 +179,13 @@ M.cmp = function()
     },
     { name = "luasnip" },
     { name = "nvim_lsp",
-        max_item_count = 50,
+        max_item_count = 30,
         entry_filter = function(entry, ctx)
           return require("cmp").lsp.CompletionItemKind.Text ~= entry:get_kind()
         end,
     },
     { name = "nvim_lua" },
+    { name = "tailwind" },
     { name = "path" },
   },
   matching = {

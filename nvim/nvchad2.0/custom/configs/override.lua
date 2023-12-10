@@ -57,6 +57,9 @@ M.treesitter = function()
     },
     inject = {
       enable = true, -- Enable language injection
+      enable_rename = true,
+      enable_close = true,
+      enable_close_on_slash = true,
       languages = {
         javascript = {"html"}, -- Inject HTML into JavaScript
       },

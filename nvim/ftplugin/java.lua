@@ -29,7 +29,7 @@ local config = {
     "java.base/java.lang=ALL-UNNAMED",
 
     "-jar",
-    "C:/Users/User/AppData/Local/nvim-data/mason/packages/jdtls/plugins/org.eclipse.equinox.launcher_1.6.400.v20210924-0641.jar",
+    "C:/Users/User/AppData/Local/nvim-data/mason/packages/jdtls/plugins/org.eclipse.equinox.launcher_1.6.600.v20231012-1237.jar",
 
     "-configuration",
     "C:/Users/User/AppData/Local/nvim-data/mason/packages/jdtls/config_win",

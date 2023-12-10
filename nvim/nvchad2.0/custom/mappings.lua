@@ -6,6 +6,8 @@ M.core = {
     ["<C-m>"] = { "<cmd>:%s/\r//g<CR>", "set file endings to unix (LF)"},
     ["x"] = { '"_x', "delete without yank", opts = opt},
     ["<Leader>i"] = { 'ci"', "Replace strings"},
+    ["<Leader>ri"] = { '<cmd>TSToolsAddMissingImports<cr>', "Add missing imports"},
+    ["<Leader>rx"] = { '<cmd>TSToolsRemoveUnused<cr>', "Add missing imports"},
   },
   i = {
   },
