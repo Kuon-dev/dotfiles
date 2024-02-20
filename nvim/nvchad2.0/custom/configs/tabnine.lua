@@ -137,6 +137,8 @@ M.cmp = function()
     ["<Tab>"] = vim.schedule_wrap(function(fallback)
       if cmp.visible() and has_words_before() then
         cmp.select_next_item({ behavior = cmp.SelectBehavior.Select })
+      elseif vim.fn.exists('b:_codeium_completions') ~= 0 then
+        vim.api.nvim_input(vim.fn['codeium#Accept']())
       else
         fallback()
       end
@@ -217,18 +219,18 @@ M.cmp = function()
   cmp.setup(options)
 end
 
-M.tabnine = function()
-  local present, tabnine = pcall(require, "cmp_tabnine.config")
-  local config = {
-    max_lines = 1000,
-    max_num_results = 5,
-    sort = true,
-    run_on_every_keystroke = true,
-    show_prediction_strength = false
-  }
-  tabnine:setup(config)
-  -- return config 
-end
+-- M.tabnine = function()
+--   local present, tabnine = pcall(require, "cmp_tabnine.config")
+--   local config = {
+--     max_lines = 1000,
+--     max_num_results = 5,
+--     sort = true,
+--     run_on_every_keystroke = true,
+--     show_prediction_strength = false
+--   }
+--   tabnine:setup(config)
+--   -- return config 
+-- end
 
 return M
 

@@ -51,13 +51,13 @@ local autoComplete = {
       "hrsh7th/cmp-nvim-lsp-document-symbol",
       "roobert/tailwindcss-colorizer-cmp.nvim",
       "ray-x/cmp-treesitter",
-      {
-        "tzachar/cmp-tabnine",
-        build = "powershell ./install.ps1", -- windows only
-        config = function()
-          require "custom.configs.tabnine".tabnine()
-        end,
-      },
+      -- {
+      --   "tzachar/cmp-tabnine",
+      --   build = "powershell ./install.ps1", -- windows only
+      --   config = function()
+      --     require "custom.configs.tabnine".tabnine()
+      --   end,
+      -- },
       {
         "L3MON4D3/LuaSnip",
         config = function(_, opts)
@@ -113,7 +113,17 @@ local autoComplete = {
       }
     end,
   },
-
+  {
+  'Exafunction/codeium.vim',
+  event = 'InsertEnter',
+  config = function ()
+    -- Change '<C-g>' here to any keycode you like.
+    vim.keymap.set('i', '<C-g>', function () return vim.fn['codeium#Accept']() end, { expr = true, silent = true })
+    vim.keymap.set('i', '<c-;>', function() return vim.fn['codeium#CycleCompletions'](1) end, { expr = true, silent = true })
+    vim.keymap.set('i', '<c-,>', function() return vim.fn['codeium#CycleCompletions'](-1) end, { expr = true, silent = true })
+    vim.keymap.set('i', '<c-x>', function() return vim.fn['codeium#Clear']() end, { expr = true, silent = true })
+  end
+  }
 }
 
 local lspPlugins = {
@@ -130,10 +140,10 @@ local lspPlugins = {
     end,
   },
   {
-    "glepnir/lspsaga.nvim",
+    "nvimdev/lspsaga.nvim",
     event = "LspAttach",
     config = function()
-        require("lspsaga").setup({})
+        require "custom.configs.lspsaga"
     end,
     dependencies = {
       {"nvim-tree/nvim-web-devicons"},
@@ -187,6 +197,9 @@ local qolPlugins = {
   },
   {
     "folke/trouble.nvim",
+    -- dependencies = {
+    --   'Exafunction/codeium.vim',
+    -- },
     requires = "nvim-tree/nvim-web-devicons",
     config = function()
       require("trouble").setup {

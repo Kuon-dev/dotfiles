@@ -12,6 +12,7 @@ local servers = {
   -- "tailwindcss",
   "pyright",
 
+  "lua_ls",
   "clangd",
   --"vuels",
    "volar",
