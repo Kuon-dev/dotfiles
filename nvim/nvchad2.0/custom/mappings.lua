@@ -8,6 +8,7 @@ M.core = {
     ["<Leader>i"] = { 'ci"', "Replace strings"},
     ["<Leader>ri"] = { '<cmd>TSToolsAddMissingImports<cr>', "Add missing imports"},
     ["<Leader>rx"] = { '<cmd>TSToolsRemoveUnused<cr>', "Add missing imports"},
+    [":"] = { '<cmd>FineCmdline<CR>', "toggle Cmdline"}
   },
   i = {
   },
@@ -41,9 +42,15 @@ M.nvimtree = {
 
   n = {
     -- toggle
-    ["<C-p>"] = { "<cmd> NvimTreeToggle <CR>", "toggle nvimtree" },
-    ["<C-e>"] = { "<cmd> NvimTreeFocus <CR>", "focus nvimtree" },
-    ["<Leader>p"] = { "<cmd> NvimTreeFindFile <CR>", "toggle nvimtree" },
+    -- ["<C-p>"] = { "<cmd> NvimTreeToggle <CR>", "toggle nvimtree" },
+    ["<C-p>"] = {
+      function ()
+        require("oil").toggle_float()
+      end,
+      "Open Oil Tree"
+    },
+    -- ["<C-e>"] = { "<cmd> NvimTreeFocus <CR>", "focus nvimtree" },
+    -- ["<Leader>p"] = { "<cmd> NvimTreeFindFile <CR>", "toggle nvimtree" },
     ["gh"] = { "<cmd>Lspsaga lsp_finder<CR>", "LSP Saga Finder" },
     ["<Leader>ca"] = { "<cmd>Lspsaga code_action<CR>", "Code Action" },
     ["gr"] = { "<cmd>Lspsaga rename<CR>", "Rename All Occurrences" },

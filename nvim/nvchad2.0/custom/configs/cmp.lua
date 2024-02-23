@@ -1,6 +1,4 @@
 local copilot_status_ok, copilot_cmp_comparators = pcall(require, "copilot_cmp.comparators")
-local luasnip = require("luasnip")
--- local codeium = require "codeium"
 local M = {}
 
 local function deprioritize_snippet(entry1, entry2)
@@ -134,20 +132,16 @@ M.cmp = function()
   mapping = {
     ["<Up>"] = require("cmp").mapping.select_prev_item(),
     ["<Down>"] = require("cmp").mapping.select_next_item(),
-    ["<Tab>"] = cmp.mapping(function(fallback)
-      if cmp.visible() then
-        cmp.confirm({ behavior = cmp.ConfirmBehavior.Insert, select = true })
-      elseif require("copilot.suggestion").is_visible() then
-        require("copilot.suggestion").accept()
-      elseif luasnip.expand_or_locally_jumpable() then
-        luasnip.expand_or_jump()
-      elseif has_words_before() then
-        cmp.complete()
+    ["<Tab>"] = vim.schedule_wrap(function(fallback)
+      if cmp.visible() and has_words_before() then
+        cmp.select_next_item({ behavior = cmp.SelectBehavior.Select })
+      -- elseif vim.fn.exists('b:_codeium_completions') ~= 0 then
+      --   vim.api.nvim_input(vim.fn['codeium#Accept']())
       else
         fallback()
       end
-    end, { "i", "s" }),
-      ['<CR>'] = cmp.mapping.confirm({
+    end),
+    ['<CR>'] = cmp.mapping.confirm({
       -- documentation says this is important.
       -- I don't know why.
       behavior = cmp.ConfirmBehavior.Replace,
@@ -176,10 +170,10 @@ M.cmp = function()
     end,
   },
   sources = {
-    -- {
-    --   name = "copilot",
-    --   max_item_count = 5,
-    -- },
+    {
+      name = "copilot",
+      max_item_count = 5,
+    },
     {
       name = "codeium",
       max_item_count = 5,
@@ -205,7 +199,7 @@ M.cmp = function()
   sorting = {
     priority_weight = 2,
     comparators = {
-      copilot_cmp_comparators.prioritize,
+      require("copilot_cmp.comparators").prioritize,
       -- Below is the default comparitor list and order for nvim-cmp
       cmp.config.compare.offset,
       -- cmp.config.compare.scopes, --this is commented in nvim-cmp too
@@ -224,7 +218,19 @@ M.cmp = function()
   cmp.setup(options)
 end
 
+-- M.tabnine = function()
+--   local present, tabnine = pcall(require, "cmp_tabnine.config")
+--   local config = {
+--     max_lines = 1000,
+--     max_num_results = 5,
+--     sort = true,
+--     run_on_every_keystroke = true,
+--     show_prediction_strength = false
+--   }
+--   tabnine:setup(config)
+--   -- return config 
+-- end
+
 return M
 
 
--- old mapping configs

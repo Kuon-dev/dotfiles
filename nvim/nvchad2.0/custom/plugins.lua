@@ -27,8 +27,8 @@ local defaultOverrides = {
     "nvim-telescope/telescope.nvim",
     lazy = false,
     config = function()
-      require "plugins.configs.telescope"
-      require "custom.configs.override".telescope()
+      -- require "plugins.configs.telescope"
+      require "custom.configs.telescope"
     end,
   },
   {
@@ -43,7 +43,7 @@ local autoComplete = {
   {
     "hrsh7th/nvim-cmp",
     opts =  require "custom.configs.tabnine".cmp(),
-   config = function()
+    config = function()
       require "custom.configs.tabnine".cmp()
     end,
     dependencies = {
@@ -76,54 +76,58 @@ local autoComplete = {
   },
   {
     "zbirenbaum/copilot.lua",
-    event = "InsertEnter",
+    enabled = true,
     dependencies = {
-      {
-        "zbirenbaum/copilot-cmp",
-        config = function()
-          require("copilot_cmp").setup()
-        end,
-      },
+      "hrsh7th/nvim-cmp",
     },
+    cmd = "Copilot",
+    build = ":Copilot auth",
+    event = "InsertEnter",
     config = function()
-      require("copilot").setup {
+      require("copilot").setup({
+        panel = {
+          enabled = true,
+          auto_refresh = true,
+        },
         suggestion = {
-          enabled = false,
-          keymap = {
-            accept = "<C-]>",
-            accept_word = false,
-            accept_line = false,
-            next = "<M-]>",
-            prev = "<M-[>",
-            dismiss = "<C-[>",
-          },
+          enabled = true,
+          auto_trigger = true,
+          accept = false, -- disable built-in keymapping
         },
-        -- panel = {
-          -- enabled = false,
-        -- },
-        server_opts_overrides = {
-          trace = "verbose",
-          settings = {
-            advanced = {
-              listCount = 3,
-              inlineSuggestCount = 3,
-            },
-          },
-        },
-      }
+      })
+
+      -- hide copilot suggestions when cmp menu is open
+      -- to prevent odd behavior/garbled up suggestions
+      local cmp_status_ok, cmp = pcall(require, "cmp")
+      if cmp_status_ok then
+        cmp.event:on("menu_opened", function()
+          vim.b.copilot_suggestion_hidden = true
+        end)
+
+        cmp.event:on("menu_closed", function()
+          vim.b.copilot_suggestion_hidden = false
+        end)
+      end
     end,
   },
   {
-  'Exafunction/codeium.vim',
-  event = 'InsertEnter',
-  config = function ()
-    -- Change '<C-g>' here to any keycode you like.
-    vim.keymap.set('i', '<C-g>', function () return vim.fn['codeium#Accept']() end, { expr = true, silent = true })
-    vim.keymap.set('i', '<c-;>', function() return vim.fn['codeium#CycleCompletions'](1) end, { expr = true, silent = true })
-    vim.keymap.set('i', '<c-,>', function() return vim.fn['codeium#CycleCompletions'](-1) end, { expr = true, silent = true })
-    vim.keymap.set('i', '<c-x>', function() return vim.fn['codeium#Clear']() end, { expr = true, silent = true })
-  end
-  }
+    'Exafunction/codeium.nvim',
+    event = { "InsertEnter", "LspAttach" },
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "hrsh7th/nvim-cmp",
+    },
+    -- event = "VeryLazy",
+    config = function ()
+      require("codeium").setup({
+        -- vim.keymap.set('i', '<C-g>', function () return vim.fn['codeium#Accept']() end, { expr = true, silent = true })
+        -- vim.keymap.set('i', '<c-;>', function() return vim.fn['codeium#CycleCompletions'](1) end, { expr = true, silent = true })
+        -- vim.keymap.set('i', '<c-,>', function() return vim.fn['codeium#CycleCompletions'](-1) end, { expr = true, silent = true })
+        -- vim.keymap.set('i', '<c-x>', function() return vim.fn['codeium#Clear']() end, { expr = true, silent = true })
+      })
+      -- Change '<C-g>' here to any keycode you like.
+    end
+  },
 }
 
 local lspPlugins = {
@@ -193,13 +197,25 @@ local qolPlugins = {
     "SmiteshP/nvim-navic"
   },
   {
-    "MunifTanjim/nui.nvim"
+    "MunifTanjim/nui.nvim",
+    lazy = false,
+  },
+  {
+    "VonHeikemen/fine-cmdline.nvim",
+    lazy = false,
+    config = function()
+      require('fine-cmdline').setup({
+        popup = {
+          position = {
+            row = '50%',
+            col = '50%',
+          },
+        },
+      })
+    end,
   },
   {
     "folke/trouble.nvim",
-    -- dependencies = {
-    --   'Exafunction/codeium.vim',
-    -- },
     requires = "nvim-tree/nvim-web-devicons",
     config = function()
       require("trouble").setup {
@@ -208,6 +224,12 @@ local qolPlugins = {
       -- refer to the configuration section below
       }
     end
+  },
+  {
+    'stevearc/oil.nvim',
+    config = function()
+      require "custom.configs.oil"
+    end,
   },
   {
     "SmiteshP/nvim-navbuddy",

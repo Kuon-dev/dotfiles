@@ -1,22 +1,5 @@
 local M = {}
 
-M.telescope = function()
-  local present, telescope = pcall(require, "telescope")
-  local options = {
-    defaults = {
-      layout_config = {
-      }
-    },
-    pickers = {
-      find_files = {
-        theme = "ivy",
-      }
-    },
-  }
-  telescope.setup(options)
-end
-
-
 M.treesitter = function()
   local present, treesitter = pcall(require, "nvim-treesitter.configs")
 
