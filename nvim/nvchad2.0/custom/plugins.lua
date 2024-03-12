@@ -1,4 +1,6 @@
-local pluginConfs = require "custom.configs.tabnine"
+local ai_complete = require "custom.plugins.ai_complete"
+local ui = require "custom.plugins.ui"
+local lsp = require "custom.plugins.lsp"
 
 local defaultOverrides = {
   {
@@ -36,97 +38,6 @@ local defaultOverrides = {
     config = function()
       require "custom.configs.autopairs"
     end,
-  },
-}
-
-local autoComplete = {
-  {
-    "hrsh7th/nvim-cmp",
-    opts =  require "custom.configs.tabnine".cmp(),
-    config = function()
-      require "custom.configs.tabnine".cmp()
-    end,
-    dependencies = {
-      "delphinus/cmp-ctags",
-      "hrsh7th/cmp-nvim-lsp-document-symbol",
-      "roobert/tailwindcss-colorizer-cmp.nvim",
-      "ray-x/cmp-treesitter",
-      -- {
-      --   "tzachar/cmp-tabnine",
-      --   build = "powershell ./install.ps1", -- windows only
-      --   config = function()
-      --     require "custom.configs.tabnine".tabnine()
-      --   end,
-      -- },
-      {
-        "L3MON4D3/LuaSnip",
-        config = function(_, opts)
-          require("plugins.configs.others").luasnip(opts)
-          require "custom.configs.luasnip"
-        end,
-      },
-    },
-  },
-  {
-    "github/copilot.vim",
-    lazy = false,
-    config = function()
-      require "custom.configs.copilot"
-    end,
-  },
-  {
-    "zbirenbaum/copilot.lua",
-    enabled = true,
-    dependencies = {
-      "hrsh7th/nvim-cmp",
-    },
-    cmd = "Copilot",
-    build = ":Copilot auth",
-    event = "InsertEnter",
-    config = function()
-      require("copilot").setup({
-        panel = {
-          enabled = true,
-          auto_refresh = true,
-        },
-        suggestion = {
-          enabled = true,
-          auto_trigger = true,
-          accept = false, -- disable built-in keymapping
-        },
-      })
-
-      -- hide copilot suggestions when cmp menu is open
-      -- to prevent odd behavior/garbled up suggestions
-      local cmp_status_ok, cmp = pcall(require, "cmp")
-      if cmp_status_ok then
-        cmp.event:on("menu_opened", function()
-          vim.b.copilot_suggestion_hidden = true
-        end)
-
-        cmp.event:on("menu_closed", function()
-          vim.b.copilot_suggestion_hidden = false
-        end)
-      end
-    end,
-  },
-  {
-    'Exafunction/codeium.nvim',
-    event = { "InsertEnter", "LspAttach" },
-    dependencies = {
-      "nvim-lua/plenary.nvim",
-      "hrsh7th/nvim-cmp",
-    },
-    -- event = "VeryLazy",
-    config = function ()
-      require("codeium").setup({
-        -- vim.keymap.set('i', '<C-g>', function () return vim.fn['codeium#Accept']() end, { expr = true, silent = true })
-        -- vim.keymap.set('i', '<c-;>', function() return vim.fn['codeium#CycleCompletions'](1) end, { expr = true, silent = true })
-        -- vim.keymap.set('i', '<c-,>', function() return vim.fn['codeium#CycleCompletions'](-1) end, { expr = true, silent = true })
-        -- vim.keymap.set('i', '<c-x>', function() return vim.fn['codeium#Clear']() end, { expr = true, silent = true })
-      })
-      -- Change '<C-g>' here to any keycode you like.
-    end
   },
 }
 
@@ -199,20 +110,6 @@ local qolPlugins = {
   {
     "MunifTanjim/nui.nvim",
     lazy = false,
-  },
-  {
-    "VonHeikemen/fine-cmdline.nvim",
-    lazy = false,
-    config = function()
-      require('fine-cmdline').setup({
-        popup = {
-          position = {
-            row = '50%',
-            col = '50%',
-          },
-        },
-      })
-    end,
   },
   {
     "folke/trouble.nvim",
@@ -297,11 +194,12 @@ local gitPlugins = {
 return {
   -- mandatory plugins
   defaultOverrides,
-  autoComplete,
+  ai_complete,
   lspPlugins,
-  lspServers,
+  lsp,
   qolPlugins,
   gitPlugins,
+  ui,
   {
     "roobert/tailwindcss-colorizer-cmp.nvim",
     -- optionally, override the default options:
@@ -314,6 +212,12 @@ return {
   {
     "editorconfig/editorconfig-vim",
     after = "nvim-lspconfig"
+  },
+  {
+    "nvim-pack/nvim-spectre",
+    config = function()
+      require("spectre").setup()
+    end
   },
   {
     "nvim-tree/nvim-tree.lua",

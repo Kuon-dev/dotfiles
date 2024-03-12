@@ -8,7 +8,7 @@ M.core = {
     ["<Leader>i"] = { 'ci"', "Replace strings"},
     ["<Leader>ri"] = { '<cmd>TSToolsAddMissingImports<cr>', "Add missing imports"},
     ["<Leader>rx"] = { '<cmd>TSToolsRemoveUnused<cr>', "Add missing imports"},
-    [":"] = { '<cmd>FineCmdline<CR>', "toggle Cmdline"}
+    -- [":"] = { '<cmd>FineCmdline<CR>', "toggle Cmdline"}
   },
   i = {
   },

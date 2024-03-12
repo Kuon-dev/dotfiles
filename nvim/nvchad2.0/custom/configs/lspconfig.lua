@@ -11,7 +11,7 @@ local servers = {
   "cssls",
   -- "tailwindcss",
   "pyright",
-
+  "jdtls",
   "lua_ls",
   "clangd",
   --"vuels",
@@ -24,19 +24,21 @@ local servers = {
 
 local function custom_on_attach(client, bufnr)
   on_attach(client, bufnr)  -- Call the existing function first
-
-  if not client.server_capabilities.semanticTokensProvider then
-    print("Restart of LSP client may be needed")
-    -- client.stop()
-    -- vim.defer_fn(function ()
-    --   lspconfig[client.name].setup {
-    --     on_attach = custom_on_attach,
-    --     capabilities = capabilities,
-    --   }
-    -- end, 1000)
-  end
+  -- if not client.server_capabilities.semanticTokensProvider then
+  --   print("Restart of LSP client may be needed")
+  --   -- client.stop()
+  --   -- vim.defer_fn(function ()
+  --   --   lspconfig[client.name].setup {
+  --   --     on_attach = custom_on_attach,
+  --   --     capabilities = capabilities,
+  --   --   }
+  --   -- end, 1000)
+  -- end
 end
 
+vim.notify = require("noice").notify
+vim.lsp.handlers["textDocument/hover"] = require("noice").hover
+vim.lsp.handlers["textDocument/signatureHelp"] = require("noice").signature
 
 for _, lsp in ipairs(servers) do
   lspconfig[lsp].setup {
@@ -96,7 +98,7 @@ require("typescript-tools").setup {
 lspconfig.emmet_ls.setup({
     -- on_attach = on_attach,
     capabilities = capabilities,
-    filetypes = { "css", "eruby", "html", "javascript", "javascriptreact", "less", "sass", "scss", "svelte", "pug", "typescriptreact", "vue", "js" },
+    filetypes = { "css", "eruby", "html", "javascript", "javascriptreact", "less", "sass", "scss", "svelte", "pug", "typescriptreact", "vue", "js", "jsp" },
     init_options = {
       html = {
         options = {
