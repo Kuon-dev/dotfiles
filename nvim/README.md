@@ -30,3 +30,6 @@ This setup is windows focused setup.
 The defualt LSP installation is focused on Mason. Type `:Mason` and search for the LSP you want to install.
 Note that if you install Powershell from Microsoft Store, you may face some errors. If you do face errors, you
 have to install powershell from their official Github page.
+
+# Nvchad 2.5
+For the NvChad 2.5 setup, there will be no java lsp. Otherwise most of the utils stay the same. If you need to setup Java on NvChad 2.5, you will need to refer to the ftplugin or use nvim-java 
