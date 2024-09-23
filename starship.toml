@@ -1,8 +1,9 @@
 "$schema" = 'https://starship.rs/config-schema.json'
 
+
 [directory]
 truncation_length = 1
-read_only = " "
+read_only = "󰑇 "
 format = "[$path](bold blue)[$lock_symbol]($lock_style) "
 
 [git_commit]
@@ -15,14 +16,14 @@ format = '[\($state( $progress_current of $progress_total)\)]($style) '
 [git_status]
 ahead = " x${count} "
 behind = " x${count} "
-conflicted = "ﲅ "
+conflicted = "󰞇 "
 modified = " x${count} "
-untracked = " x${count} "
+untracked = " x${count} "
 stashed = " x${count} "
 staged = " x${count} "
-diverged = " x${count} "
-renamed = "凜 x${count} "
-deleted = "﫧 x${count} "
+diverged = "󰃻 x${count} "
+renamed = "󰑕 x${count} "
+deleted = "󰆴 x${count} "
 style = "bold cyan"
 format = "[$all_status](bold cyan)[$ahead_behind](bold red)"
 
@@ -64,10 +65,10 @@ format = 'via [$symbol]($style)'
 symbol = " "
 
 [memory_usage]
-symbol = " "
+symbol = "󰍛 "
 
 [nim]
-symbol = " "
+symbol = " "
 
 [nix_shell]
 symbol = " "
@@ -77,7 +78,7 @@ symbol = " "
 format = 'via [$symbol]($style)'
 
 [package]
-symbol = " "
+symbol = " "
 
 [perl]
 symbol = " "
