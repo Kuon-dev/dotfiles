@@ -6,3 +6,13 @@ Quick file rundown
 - [OhMyPosh](https://ohmyposh.dev) (terminal prompt)
 - [Starship](https://starship.rs) (terminal prompt)
 - Others (junk file, includes vscode theme)
+
+
+## Installation
+Make sure you have installed the following tools from your package manager
+- Nushell
+- Wezterm
+- Starship
+
+Mac / Linux only
+- run `nu migrate-mac.nu` on your terminal
