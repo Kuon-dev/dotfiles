@@ -58,7 +58,7 @@ diverged = "󰃻 x${count} "
 renamed = "󰑕 x${count} "
 deleted = "󰆴 x${count} "
 style = "bold sky"
-format = "[$all_status](bold teal)[$ahead_behind](bold peach)"
+format = "[$all_status](bold pink)[$ahead_behind](bold peach)"
 
 [aws]
 symbol = "  "
