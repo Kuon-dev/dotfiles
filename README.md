@@ -13,6 +13,7 @@ Make sure you have installed the following tools from your package manager
 - Nushell
 - Wezterm
 - Starship
+- Zoxide
 
 Mac / Linux only
 - run `nu migrate-mac.nu` on your terminal
